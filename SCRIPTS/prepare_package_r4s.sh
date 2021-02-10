@@ -92,6 +92,7 @@ sed -i '/set_interface_core 20 "eth1"/a\ethtool -C eth0 rx-usecs 1000 rx-frames 
 #（不需要的包直接修改seed就好
 #R8168
 svn co https://github.com/immortalwrt/immortalwrt/branches/master/package/ctcgfw/r8168 package/new/r8168
+patch -p1 < ../SCRIPTS/led.patch
 sed -i '/r8169/d' ./target/linux/rockchip/image/armv8.mk
 #更换cryptodev-linux
 rm -rf ./package/kernel/cryptodev-linux
