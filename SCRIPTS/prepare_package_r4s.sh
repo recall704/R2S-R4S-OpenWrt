@@ -228,7 +228,7 @@ svn co https://github.com/msylgj/OpenWrt_luci-app/trunk/others/luci-app-tencentd
 #翻译及部分功能优化
 svn co https://github.com/QiuSimons/R2S-R4S-X86-OpenWrt/trunk/PATCH/duplicate/addition-trans-zh package/lean/lean-translate
 #WOL
-svn co https://github.com/sundaqiang/openwrt-packages/trunk/luci-app-services-wolplus package/new/luci-app-services-wolplus
+svn co https://github.com/msylgj/OpenWrt_luci-app/trunk/others/luci-app-services-wolplus package/new/luci-app-services-wolplus
 
 ##最后的收尾工作
 #Lets Fuck
