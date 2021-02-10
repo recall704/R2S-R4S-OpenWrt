@@ -45,4 +45,4 @@
 ## 特别感谢（排名不分先后）
 * [QiuSimons/R2S-R4S-X86-OpenWrt](https://github.com/project-openwrt/R2S-OpenWrt)
 * [coolsnowwolf/lede](https://github.com/coolsnowwolf/lede)
-* [project-openwrt/openwrt](https://github.com/project-openwrt/openwrt/)
+* [immortalwrt/immortalwrt](https://github.com/immortalwrt/immortalwrt)
