@@ -26,8 +26,6 @@ wget -q https://github.com/QiuSimons/R2S-R4S-X86-OpenWrt/raw/master/PATCH/new/pa
 wget -P package/network/services/dnsmasq/patches/ https://github.com/QiuSimons/R2S-R4S-X86-OpenWrt/raw/master/PATCH/new/package/900-add-filter-aaaa-option.patch
 patch -p1 < ./dnsmasq-add-filter-aaaa-option.patch
 patch -p1 < ./luci-add-filter-aaaa-option.patch
-rm -rf ./package/base-files/files/etc/init.d/boot
-wget -P package/base-files/files/etc/init.d https://github.com/immortalwrt/immortalwrt/raw/openwrt-18.06-k5.4/package/base-files/files/etc/init.d/boot
 #（从这行开始接下来4个操作全是和fullcone相关的，不需要可以一并注释掉，但极不建议
 # Patch Kernel 以解决fullcone冲突
 pushd target/linux/generic/hack-5.4
