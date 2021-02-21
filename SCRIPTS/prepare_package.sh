@@ -88,8 +88,9 @@ svn co https://github.com/msylgj/OpenWrt_luci-app/trunk/lean/luci-app-cpufreq pa
 svn co https://github.com/msylgj/OpenWrt_luci-app/trunk/lean/luci-app-arpbind package/lean/luci-app-arpbind
 #AutoCore
 svn co https://github.com/immortalwrt/immortalwrt/branches/master/package/lean/autocore package/lean/autocore
+rm -rf ./feeds/packages/utils/coremark
 svn co https://github.com/immortalwrt/packages/trunk/utils/coremark feeds/packages/utils/coremark
-ln -sf ../../../feeds/packages/utils/coremark ./package/feeds/packages/coremark
+sed -i 's,default 2,default 8,g' feeds/packages/utils/coremark/Makefile
 sed -i 's,default n,default y,g' feeds/packages/utils/coremark/Makefile
 #oled
 svn co https://github.com/msylgj/OpenWrt_luci-app/trunk/others/luci-app-oled package/new/luci-app-oled
