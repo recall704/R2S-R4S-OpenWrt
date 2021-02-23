@@ -1,21 +1,19 @@
 #!/bin/bash
 clear
 
+# add R4S support
+wget -q https://github.com/quintus-lab/OpenWRT-R2S-R4S/raw/master/patches/0004-uboot-add-r4s-support.patch
+wget -q https://github.com/quintus-lab/OpenWRT-R2S-R4S/raw/master/patches/0005-target-5.10-r4s-support.patch
+wget -q https://github.com/quintus-lab/OpenWRT-R2S-R4S/raw/master/patches/0006-target-5.10-rockchip-support.patch
+patch -p1 < ./0004-uboot-add-r4s-support.patch
+patch -p1 < ./0005-target-5.10-r4s-support.patch
+patch -p1 < ./0006-target-5.10-rockchip-support.patch
+
 #提高温度墙
 wget -P target/linux/rockchip/patches-5.10/ https://github.com/QiuSimons/R2S-R4S-X86-OpenWrt/raw/master/PATCH/new/main/213-RK3399-set-critical-CPU-temperature-for-thermal-throttling.patch
 
 #使用特定的优化
 sed -i 's,-mcpu=generic,-march=armv8-a+crypto+crc -mcpu=cortex-a72.cortex-a53+crypto+crc -mtune=cortex-a72.cortex-a53,g' include/target.mk
-
-#Experimental
-sed -i '/CRYPTO_DEV_ROCKCHIP/d' ./target/linux/rockchip/armv8/config-5.10
-sed -i '/HW_RANDOM_ROCKCHIP/d' ./target/linux/rockchip/armv8/config-5.10
-sed -i '/CONFIG_SLUB/d' ./target/linux/rockchip/armv8/config-5.10
-sed -i '/CONFIG_PROC_[^V].*/d' ./target/linux/rockchip/armv8/config-5.10
-echo '
-CONFIG_CRYPTO_DEV_ROCKCHIP=y
-CONFIG_HW_RANDOM_ROCKCHIP=y
-' >> ./target/linux/rockchip/armv8/config-5.10
 
 #IRQ
 sed -i '/set_interface_core 20 "eth1"/a\set_interface_core 8 "ff3c0000" "ff3c0000.i2c"' target/linux/rockchip/armv8/base-files/etc/hotplug.d/net/40-net-smp-affinity

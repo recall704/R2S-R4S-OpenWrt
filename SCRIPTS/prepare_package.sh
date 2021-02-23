@@ -16,13 +16,6 @@ sed -i 's,-SNAPSHOT,,g' package/base-files/image-config.in
 # rngd
 wget -q https://github.com/quintus-lab/OpenWRT-R2S-R4S/raw/master/patches/0002-rockchip-rngd.patch
 patch -p1 < ./0002-rockchip-rngd.patch
-# add R4S support
-wget -q https://github.com/quintus-lab/OpenWRT-R2S-R4S/raw/master/patches/0004-uboot-add-r4s-support.patch
-wget -q https://github.com/quintus-lab/OpenWRT-R2S-R4S/raw/master/patches/0005-target-5.10-r4s-support.patch
-wget -q https://github.com/quintus-lab/OpenWRT-R2S-R4S/raw/master/patches/0006-target-5.10-rockchip-support.patch
-patch -p1 < ./0004-uboot-add-r4s-support.patch
-patch -p1 < ./0005-target-5.10-r4s-support.patch
-patch -p1 < ./0006-target-5.10-rockchip-support.patch
 # patch cpuinfo display modelname
 wget -q https://github.com/quintus-lab/OpenWRT-R2S-R4S/raw/master/patches/3829.patch
 patch -p1 < ./3829.patch
