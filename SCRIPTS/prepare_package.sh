@@ -1,9 +1,6 @@
 #!/bin/bash
 clear
 
-#凑合解决方案
-#wget -qO - https://patch-diff.githubusercontent.com/raw/openwrt/openwrt/pull/3875.patch | patch -p1
-
 #使用O2级别的优化
 sed -i 's/Os/O2/g' include/target.mk
 #更新feed
@@ -16,7 +13,19 @@ sed -i 's,-SNAPSHOT,,g' include/version.mk
 sed -i 's,-SNAPSHOT,,g' package/base-files/image-config.in
 
 ##必要的patch
-wget -P target/linux/generic/pending-5.4 https://github.com/immortalwrt/immortalwrt/raw/master/target/linux/generic/hack-5.4/312-arm64-cpuinfo-Add-model-name-in-proc-cpuinfo-for-64bit-ta.patch
+# rngd
+wget -q https://github.com/quintus-lab/OpenWRT-R2S-R4S/raw/master/patches/0002-rockchip-rngd.patch
+patch -p1 < ./0002-rockchip-rngd.patch
+# add R4S support
+wget -q https://github.com/quintus-lab/OpenWRT-R2S-R4S/raw/master/patches/0004-uboot-add-r4s-support.patch
+wget -q https://github.com/quintus-lab/OpenWRT-R2S-R4S/raw/master/patches/0005-target-5.10-r4s-support.patch
+wget -q https://github.com/quintus-lab/OpenWRT-R2S-R4S/raw/master/patches/0006-target-5.10-rockchip-support.patch
+patch -p1 < ./0004-uboot-add-r4s-support.patch
+patch -p1 < ./0005-target-5.10-r4s-support.patch
+patch -p1 < ./0006-target-5.10-rockchip-support.patch
+# patch cpuinfo display modelname
+wget -q https://github.com/quintus-lab/OpenWRT-R2S-R4S/raw/master/patches/3829.patch
+patch -p1 < ./3829.patch
 #patch jsonc
 wget -q https://github.com/QiuSimons/R2S-R4S-X86-OpenWrt/raw/master/PATCH/new/package/use_json_object_new_int64.patch
 patch -p1 < ./use_json_object_new_int64.patch
@@ -26,31 +35,13 @@ wget -q https://github.com/QiuSimons/R2S-R4S-X86-OpenWrt/raw/master/PATCH/new/pa
 wget -P package/network/services/dnsmasq/patches/ https://github.com/QiuSimons/R2S-R4S-X86-OpenWrt/raw/master/PATCH/new/package/900-add-filter-aaaa-option.patch
 patch -p1 < ./dnsmasq-add-filter-aaaa-option.patch
 patch -p1 < ./luci-add-filter-aaaa-option.patch
-#（从这行开始接下来4个操作全是和fullcone相关的，不需要可以一并注释掉，但极不建议
-# Patch Kernel 以解决fullcone冲突
-pushd target/linux/generic/hack-5.4
-wget https://github.com/coolsnowwolf/lede/raw/master/target/linux/generic/hack-5.4/952-net-conntrack-events-support-multiple-registrant.patch
-popd
-#Patch FireWall 以增添fullcone功能
-mkdir package/network/config/firewall/patches
-wget -P package/network/config/firewall/patches/ https://github.com/immortalwrt/immortalwrt/raw/master/package/network/config/firewall/patches/fullconenat.patch
-# Patch LuCI 以增添fullcone开关
-wget -q https://github.com/QiuSimons/R2S-R4S-X86-OpenWrt/raw/master/PATCH/new/package/luci-app-firewall_add_fullcone.patch
-patch -p1 < ./luci-app-firewall_add_fullcone.patch
-#FullCone 相关组件
-cp -rf ../openwrt-lienol/package/network/fullconenat ./package/network/fullconenat
-#（从这行开始接下来3个操作全是和SFE相关的，不需要可以一并注释掉，但极不建议
-# Patch Kernel 以支援SFE
-pushd target/linux/generic/hack-5.4
-wget https://github.com/coolsnowwolf/lede/raw/master/target/linux/generic/hack-5.4/953-net-patch-linux-kernel-to-support-shortcut-fe.patch
-popd
-# Patch LuCI 以增添SFE开关
-wget -q https://github.com/QiuSimons/R2S-R4S-X86-OpenWrt/raw/master/PATCH/new/package/luci-app-firewall_add_sfe_switch.patch
-patch -p1 < ./luci-app-firewall_add_sfe_switch.patch
-# SFE 相关组件
-svn co https://github.com/coolsnowwolf/lede/trunk/package/lean/shortcut-fe package/lean/shortcut-fe
-svn co https://github.com/coolsnowwolf/lede/trunk/package/lean/fast-classifier package/lean/fast-classifier
-wget -P package/base-files/files/etc/init.d/ https://github.com/QiuSimons/R2S-R4S-X86-OpenWrt/raw/master/PATCH/duplicate/shortcut-fe
+#Fullcone patch
+wget -q https://github.com/quintus-lab/OpenWRT-R2S-R4S/raw/master/patches/1002-add-fullconenat-support.patch
+wget -q https://github.com/quintus-lab/OpenWRT-R2S-R4S/raw/master/patches/1003-luci-app-firewall_add_fullcone.patch
+wget -q https://github.com/quintus-lab/OpenWRT-R2S-R4S/raw/master/patches/1004-netconntrack.patch
+patch -p1 < ./1002-add-fullconenat-support.patch
+patch -p1 < ./1003-luci-app-firewall_add_fullcone.patch
+patch -p1 < ./1004-netconntrack.patch
 
 ##获取额外package
 #（不用注释这里的任何东西，这不会对提升action的执行速度起到多大的帮助
@@ -60,13 +51,12 @@ sed -i '/patchelf pkgconf/i\tools-y += ucl upx' ./tools/Makefile
 sed -i '\/autoconf\/compile :=/i\$(curdir)/upx/compile := $(curdir)/ucl/compile' ./tools/Makefile
 svn co https://github.com/immortalwrt/immortalwrt/branches/master/tools/upx tools/upx
 svn co https://github.com/immortalwrt/immortalwrt/branches/master/tools/ucl tools/ucl
+#update curl
+svn co https://github.com/openwrt/openwrt/branches/openwrt-19.07/package/network/utils/curl package/network/utils/curl
 #R8168
 svn co https://github.com/immortalwrt/immortalwrt/branches/master/package/ctcgfw/r8168 package/new/r8168
 patch -p1 < ../SCRIPTS/led.patch
 sed -i '/r8169/d' ./target/linux/rockchip/image/armv8.mk
-#更换cryptodev-linux
-rm -rf ./package/kernel/cryptodev-linux
-svn co https://github.com/openwrt/openwrt/trunk/package/kernel/cryptodev-linux package/kernel/cryptodev-linux
 #更换Node版本
 rm -rf ./feeds/packages/lang/node
 svn co https://github.com/nxhack/openwrt-node-packages/trunk/node feeds/packages/lang/node
