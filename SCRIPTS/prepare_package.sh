@@ -35,13 +35,17 @@ wget -q https://github.com/QiuSimons/R2S-R4S-X86-OpenWrt/raw/master/PATCH/new/pa
 wget -P package/network/services/dnsmasq/patches/ https://github.com/QiuSimons/R2S-R4S-X86-OpenWrt/raw/master/PATCH/new/package/900-add-filter-aaaa-option.patch
 patch -p1 < ./dnsmasq-add-filter-aaaa-option.patch
 patch -p1 < ./luci-add-filter-aaaa-option.patch
-#Fullcone patch
-wget -q https://github.com/quintus-lab/OpenWRT-R2S-R4S/raw/master/patches/1002-add-fullconenat-support.patch
-wget -q https://github.com/quintus-lab/OpenWRT-R2S-R4S/raw/master/patches/1003-luci-app-firewall_add_fullcone.patch
-wget -q https://github.com/quintus-lab/OpenWRT-R2S-R4S/raw/master/patches/1004-netconntrack.patch
-patch -p1 < ./1002-add-fullconenat-support.patch
-patch -p1 < ./1003-luci-app-firewall_add_fullcone.patch
-patch -p1 < ./1004-netconntrack.patch
+#（从这行开始接下来4个操作全是和fullcone相关的，不需要可以一并注释掉，但极不建议
+# Patch Kernel 以解决fullcone冲突
+wget -P target/linux/generic/hack-5.10/ https://github.com/coolsnowwolf/lede/raw/master/target/linux/generic/hack-5.4/952-net-conntrack-events-support-multiple-registrant.patch
+#Patch FireWall 以增添fullcone功能
+mkdir package/network/config/firewall/patches
+wget -P package/network/config/firewall/patches/ https://github.com/immortalwrt/immortalwrt/raw/master/package/network/config/firewall/patches/fullconenat.patch
+# Patch LuCI 以增添fullcone开关
+wget -q https://github.com/QiuSimons/R2S-R4S-X86-OpenWrt/raw/master/PATCH/new/package/luci-app-firewall_add_fullcone.patch
+patch -p1 < ./luci-app-firewall_add_fullcone.patch
+#FullCone 相关组件
+svn co https://github.com/Lienol/openwrt/branches/main/package/network/fullconenat package/network/fullconenat
 
 ##获取额外package
 #（不用注释这里的任何东西，这不会对提升action的执行速度起到多大的帮助

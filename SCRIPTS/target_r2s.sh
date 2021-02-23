@@ -15,8 +15,37 @@ sed -i 's,"eth1" "eth0","eth0" "eth1",g' target/linux/rockchip/armv8/base-files/
 sed -i "s,'eth1' 'eth0','eth0' 'eth1',g" target/linux/rockchip/armv8/base-files/etc/board.d/02_network
 #翻译及部分功能优化
 svn co https://github.com/QiuSimons/R2S-R4S-X86-OpenWrt/trunk/PATCH/duplicate/addition-trans-zh-r2s package/lean/lean-translate
+sed -i 's/+kmod-fast-classifier //g' package/lean/lean-translate/Makefile
 sed -i '/chinadnslist/d' package/lean/lean-translate/files/zzz-default-settings
 sed -i '/MosChinaDNS/d' package/lean/lean-translate/files/zzz-default-settings
+
+##R2S相关
+#crypto
+echo '
+CONFIG_CRYPTO_CRCT10DIF_ARM64_CE=n
+CONFIG_ARM64_CRYPTO=y
+CONFIG_CRYPTO_AES_ARM64=y
+CONFIG_CRYPTO_AES_ARM64_BS=y
+CONFIG_CRYPTO_AES_ARM64_CE=y
+CONFIG_CRYPTO_AES_ARM64_CE_BLK=y
+CONFIG_CRYPTO_AES_ARM64_CE_CCM=y
+CONFIG_CRYPTO_AES_ARM64_NEON_BLK=y
+CONFIG_CRYPTO_CHACHA20=y
+CONFIG_CRYPTO_CHACHA20_NEON=y
+CONFIG_CRYPTO_CRYPTD=y
+CONFIG_CRYPTO_GF128MUL=y
+CONFIG_CRYPTO_GHASH_ARM64_CE=y
+CONFIG_CRYPTO_SHA1=y
+CONFIG_CRYPTO_SHA1_ARM64_CE=y
+CONFIG_CRYPTO_SHA256_ARM64=y
+CONFIG_CRYPTO_SHA2_ARM64_CE=y
+# CONFIG_CRYPTO_SHA3_ARM64 is not set
+CONFIG_CRYPTO_SHA512_ARM64=y
+# CONFIG_CRYPTO_SHA512_ARM64_CE is not set
+CONFIG_CRYPTO_SIMD=y
+# CONFIG_CRYPTO_SM3_ARM64_CE is not set
+# CONFIG_CRYPTO_SM4_ARM64_CE is not set
+' >> ./target/linux/rockchip/armv8/config-5.10
 
 #预配置一些插件
 wget -P files/etc/config/ https://github.com/QiuSimons/R2S-R4S-X86-OpenWrt/raw/master/PATCH/R2S/files/etc/config/cpulimit
