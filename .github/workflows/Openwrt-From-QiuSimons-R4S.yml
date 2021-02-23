@@ -108,13 +108,6 @@ jobs:
           cd openwrt
           let make_process=$(nproc)+1
           make -j${make_process} V=s || make -j${make_process} V=s || make -j1 V=s
-      - name: Cleaning
-        run: |
-          df -h
-          cd openwrt/bin/targets/rockchip/armv8
-          wget -q https://github.com/QiuSimons/R2S-R4S-X86-OpenWrt/raw/master/SCRIPTS/06_cleaning.sh
-          sed -i 's/squashfs/ext4/g' ./06_cleaning.sh
-          /bin/bash ./06_cleaning.sh
       - name: Print Disk Space After
         run: df -h
       - name: Assemble Artifact
@@ -122,14 +115,18 @@ jobs:
         run: |
           rm -rf ./artifact/
           mkdir -p ./artifact/
-          #cp openwrt/bin/targets/rockchip/armv8/*squashfs-sysupgrade.img.gz ./artifact/
-          cp openwrt/bin/targets/rockchip/armv8/*ext4-sysupgrade.img.gz ./artifact/
-          cd openwrt
+          mv openwrt/bin/targets/rockchip/armv8/*sysupgrade.img* ./artifact/
+          cd ./artifact/
+          gzip -d *.gz && exit 0
+          gzip *.img
+          zip R4S-OPoA-$(date +%Y-%m-%d)-ext4.zip *r4s*ext4*
+          zip R4S-OPoA-$(date +%Y-%m-%d)-sfs.zip *r4s*squashfs*
+          cd ../openwrt
           cp .config ../artifact/config-full
           ./scripts/diffconfig.sh > ../artifact/config.seed
           cd ..
           zip -r artifact.zip ./artifact/
-          release_tag="R4S-OPoA-QiuSimons-$(date +%Y-%m-%d)"
+          release_tag="R4S-OPoA-$(date +%Y-%m-%d)"
           echo "##[set-output name=release_tag;]$release_tag"
       - name: Upload Artifact
         uses: actions/upload-artifact@v2
