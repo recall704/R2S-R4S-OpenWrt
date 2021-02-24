@@ -69,6 +69,9 @@ rm -rf ./feeds/packages/lang/node-serialport
 svn co https://github.com/nxhack/openwrt-node-packages/trunk/node-serialport feeds/packages/lang/node-serialport
 rm -rf ./feeds/packages/lang/node-serialport-bindings
 svn co https://github.com/nxhack/openwrt-node-packages/trunk/node-serialport-bindings feeds/packages/lang/node-serialport-bindings
+rm -rf ./feeds/packages/lang/node-yarn
+svn co https://github.com/nxhack/openwrt-node-packages/trunk/node-yarn feeds/packages/lang/node-yarn
+ln -sf ../../../feeds/packages/lang/node-yarn ./package/feeds/packages/node-yarn
 #luci-app-freq
 svn co https://github.com/msylgj/OpenWrt_luci-app/trunk/lean/luci-app-cpufreq package/lean/luci-app-cpufreq
 #arpbind
