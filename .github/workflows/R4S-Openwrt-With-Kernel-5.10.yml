@@ -1,15 +1,15 @@
 name: R4S Openwrt With Kernel 5.10
 
 on:
-  # push:
-  #   branches:
-  #     - master
-  #   paths:
-  #     - '.github/workflows/Openwrt-From-QiuSimons-R4S.yml'
-  schedule:
-    - cron: '00 03 * * 1'
-  watch:
-    types: [started]
+  push:
+      branches:
+        - kernel-5.10
+      paths:
+        - '.github/workflows/R4S-Openwrt-With-Kernel-5.10.yml'
+ # schedule:
+ #  - cron: '00 04 * * 1'
+ # watch:
+ #  types: [started]
 
 jobs:
 
