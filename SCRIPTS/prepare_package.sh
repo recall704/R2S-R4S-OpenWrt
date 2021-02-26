@@ -13,6 +13,9 @@ sed -i 's,-SNAPSHOT,,g' include/version.mk
 sed -i 's,-SNAPSHOT,,g' package/base-files/image-config.in
 
 ##必要的patch
+# target-5.10
+wget -q https://github.com/quintus-lab/OpenWRT-R2S-R4S/raw/master/patches/0006-target-5.10-rockchip-support.patch
+patch -p1 < ./0006-target-5.10-rockchip-support.patch
 # rngd
 wget -q https://github.com/quintus-lab/OpenWRT-R2S-R4S/raw/master/patches/0002-rockchip-rngd.patch
 patch -p1 < ./0002-rockchip-rngd.patch
@@ -28,15 +31,13 @@ wget -q https://github.com/QiuSimons/R2S-R4S-X86-OpenWrt/raw/master/PATCH/new/pa
 wget -P package/network/services/dnsmasq/patches/ https://github.com/QiuSimons/R2S-R4S-X86-OpenWrt/raw/master/PATCH/new/package/900-add-filter-aaaa-option.patch
 patch -p1 < ./dnsmasq-add-filter-aaaa-option.patch
 patch -p1 < ./luci-add-filter-aaaa-option.patch
-#（从这行开始接下来4个操作全是和fullcone相关的，不需要可以一并注释掉，但极不建议
-# Patch Kernel 以解决fullcone冲突
-wget -P target/linux/generic/hack-5.4/ https://github.com/coolsnowwolf/lede/raw/master/target/linux/generic/hack-5.4/952-net-conntrack-events-support-multiple-registrant.patch
-#Patch FireWall 以增添fullcone功能
-mkdir package/network/config/firewall/patches
-wget -P package/network/config/firewall/patches/ https://github.com/immortalwrt/immortalwrt/raw/master/package/network/config/firewall/patches/fullconenat.patch
-# Patch LuCI 以增添fullcone开关
-wget -q https://github.com/QiuSimons/R2S-R4S-X86-OpenWrt/raw/master/PATCH/new/package/luci-app-firewall_add_fullcone.patch
-patch -p1 < ./luci-app-firewall_add_fullcone.patch
+#Fullcone patch
+wget -q https://github.com/quintus-lab/OpenWRT-R2S-R4S/raw/master/patches/1002-add-fullconenat-support.patch
+wget -q https://github.com/quintus-lab/OpenWRT-R2S-R4S/raw/master/patches/1003-luci-app-firewall_add_fullcone.patch
+wget -q https://github.com/quintus-lab/OpenWRT-R2S-R4S/raw/master/patches/1004-netconntrack.patch
+patch -p1 < ../patches/1002-add-fullconenat-support.patch
+patch -p1 < ../patches/1003-luci-app-firewall_add_fullcone.patch
+patch -p1 < ../patches/1004-netconntrack.patch
 #FullCone 相关组件
 svn co https://github.com/Lienol/openwrt/branches/main/package/network/fullconenat package/network/fullconenat
 

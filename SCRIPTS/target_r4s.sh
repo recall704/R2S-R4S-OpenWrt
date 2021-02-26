@@ -4,12 +4,12 @@ clear
 # add R4S support
 wget -q https://github.com/quintus-lab/OpenWRT-R2S-R4S/raw/master/patches/0004-uboot-add-r4s-support.patch
 wget -q https://github.com/quintus-lab/OpenWRT-R2S-R4S/raw/master/patches/0005-target-5.10-r4s-support.patch
-wget -q https://github.com/quintus-lab/OpenWRT-R2S-R4S/raw/master/patches/0006-target-5.10-rockchip-support.patch
 patch -p1 < ./0004-uboot-add-r4s-support.patch
 patch -p1 < ./0005-target-5.10-r4s-support.patch
-patch -p1 < ./0006-target-5.10-rockchip-support.patch
 
-#提高温度墙
+#overclock 1.8/2.2
+rm -rf ./target/linux/rockchip/patches-5.10/992-rockchip-rk3399-overclock-to-2.2-1.8-GHz-for-NanoPi4.patch
+wget -P target/linux/rockchip/patches-5.10/ https://github.com/QiuSimons/R2S-R4S-X86-OpenWrt/raw/master/PATCH/new/main/991-rockchip-rk3399-overclock-to-2.2-1.8-GHz-for-NanoPi4.patch
 wget -P target/linux/rockchip/patches-5.10/ https://github.com/QiuSimons/R2S-R4S-X86-OpenWrt/raw/master/PATCH/new/main/213-RK3399-set-critical-CPU-temperature-for-thermal-throttling.patch
 
 #使用特定的优化
