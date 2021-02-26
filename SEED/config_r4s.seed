@@ -67,6 +67,7 @@ CONFIG_PACKAGE_lsblk=y
 CONFIG_PACKAGE_block-mount=y
 CONFIG_PACKAGE_mount-utils=y
 CONFIG_PACKAGE_swap-utils=y
+CONFIG_PACKAGE_openssh-sftp-server=y
 
 ### LUCI ###
 CONFIG_LUCI_LANG_zh_Hans=y
