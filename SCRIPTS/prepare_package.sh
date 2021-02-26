@@ -35,9 +35,9 @@ patch -p1 < ./luci-add-filter-aaaa-option.patch
 wget -q https://github.com/quintus-lab/OpenWRT-R2S-R4S/raw/master/patches/1002-add-fullconenat-support.patch
 wget -q https://github.com/quintus-lab/OpenWRT-R2S-R4S/raw/master/patches/1003-luci-app-firewall_add_fullcone.patch
 wget -q https://github.com/quintus-lab/OpenWRT-R2S-R4S/raw/master/patches/1004-netconntrack.patch
-patch -p1 < ../patches/1002-add-fullconenat-support.patch
-patch -p1 < ../patches/1003-luci-app-firewall_add_fullcone.patch
-patch -p1 < ../patches/1004-netconntrack.patch
+patch -p1 < ./1002-add-fullconenat-support.patch
+patch -p1 < ./1003-luci-app-firewall_add_fullcone.patch
+patch -p1 < ./1004-netconntrack.patch
 #FullCone 相关组件
 svn co https://github.com/Lienol/openwrt/branches/main/package/network/fullconenat package/network/fullconenat
 
